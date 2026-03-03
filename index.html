@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WBC — The Complete Archive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Archivo+Black&family=Archivo+Narrow:wght@400;500;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#12100E;--ink-mid:#2C2825;--ink-soft:#5C5650;
+  --parchment:#F2EDE4;--paper:#FAF7F2;--paper-dk:#EDE8DF;
+  --gold:#B8860B;--gold-lt:#D4A017;--red:#8B1A1A;
+  --rule:rgba(18,16,14,0.1);
+  --f-display:'DM Serif Display',serif;
+  --f-black:'Archivo Black',sans-serif;
+  --f-narrow:'Archivo Narrow',sans-serif;
+  --f-serif:'Libre Baskerville',serif;
+  --ease:cubic-bezier(.4,0,.2,1);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--f-narrow);background:var(--paper);color:var(--ink);overflow-x:hidden}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.5}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;background:var(--ink);height:56px;display:flex;align-items:center;padding:0 clamp(1.25rem,4vw,3.5rem);justify-content:space-between;border-bottom:2px solid var(--gold)}
+.nav-logo{display:flex;align-items:baseline;gap:.5rem;text-decoration:none}
+.nav-logo-main{font-family:var(--f-black);font-size:1rem;letter-spacing:.22em;text-transform:uppercase;color:var(--paper)}
+.nav-logo-sub{font-family:var(--f-serif);font-style:italic;font-size:.72rem;color:var(--gold-lt);letter-spacing:.05em}
+.nav-links{display:flex;align-items:center;gap:.1rem;list-style:none}
+.nav-links a{font-family:var(--f-narrow);font-weight:600;font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(242,237,228,.5);text-decoration:none;padding:.3rem .75rem;transition:color .2s}
+.nav-links a:hover{color:var(--gold-lt)}
+.nav-ed{font-family:var(--f-narrow);font-size:.65rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:rgba(242,237,228,.25)}
+
+/* HERO */
+#hero{background:var(--ink);padding-top:56px;min-height:100vh;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.hero-tex{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(242,237,228,.025) 59px,rgba(242,237,228,.025) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(242,237,228,.015) 59px,rgba(242,237,228,.015) 60px)}
+.hero-inner{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;padding:clamp(2rem,5vw,4rem) clamp(1.25rem,5vw,5rem)}
+.masthead-rule{display:flex;align-items:center;gap:1.5rem;margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid rgba(184,134,11,.2)}
+.masthead-date{font-family:var(--f-serif);font-size:.72rem;font-style:italic;color:rgba(184,134,11,.6);letter-spacing:.05em;white-space:nowrap}
+.masthead-line{flex:1;height:1px;background:rgba(184,134,11,.12)}
+.masthead-vol{font-family:var(--f-narrow);font-size:.65rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(184,134,11,.45);white-space:nowrap}
+.hero-kicker{font-family:var(--f-narrow);font-size:.7rem;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;display:flex;align-items:center;gap:.75rem}
+.hero-kicker::before,.hero-kicker::after{content:'';flex:0 0 28px;height:1px;background:var(--gold)}
+.hero-headline{font-family:var(--f-display);font-size:clamp(3.5rem,10vw,9.5rem);line-height:.88;color:var(--paper);letter-spacing:-.01em;margin-bottom:.5rem;animation:fadeUp 1s ease both}
+.hero-headline em{font-style:italic;color:rgba(242,237,228,.35);font-size:.75em;display:block;margin-left:.15em}
+.hero-body{display:grid;grid-template-columns:1fr 1fr;gap:3rem;margin-top:3rem;padding-top:2rem;border-top:1px solid rgba(242,237,228,.07);animation:fadeUp 1s .3s ease both}
+@media(max-width:768px){.hero-body{grid-template-columns:1fr}}
+.hero-desc{font-family:var(--f-serif);font-size:clamp(.88rem,1.5vw,1.05rem);line-height:1.85;color:rgba(242,237,228,.5)}
+.hero-desc strong{color:rgba(242,237,228,.82);font-weight:700}
+.hero-facts{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(242,237,228,.05);border:1px solid rgba(242,237,228,.05);align-self:start}
+.fact{background:rgba(18,16,14,.55);padding:1.1rem 1.25rem}
+.fact-num{font-family:var(--f-black);font-size:2.2rem;color:var(--paper);line-height:1;margin-bottom:.2rem}
+.fact-num span{color:var(--gold-lt)}
+.fact-lbl{font-family:var(--f-narrow);font-size:.62rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(242,237,228,.3)}
+.hero-cta{display:flex;align-items:center;gap:1rem;margin-top:auto;padding-top:3rem;font-family:var(--f-narrow);font-size:.7rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(242,237,228,.28);animation:fadeUp 1s .6s ease both;text-decoration:none}
+.hero-cta i{animation:bob 2s infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+
+/* CHAMPIONS STRIP */
+.champs-strip{background:var(--gold);padding:.65rem clamp(1.25rem,5vw,5rem);display:flex;align-items:center;gap:2.5rem;overflow-x:auto;scrollbar-width:none;position:relative;z-index:3}
+.champs-strip::-webkit-scrollbar{display:none}
+.strip-lbl{font-family:var(--f-black);font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(18,16,14,.45);white-space:nowrap;flex-shrink:0}
+.strip-div{width:1px;height:18px;background:rgba(18,16,14,.15);flex-shrink:0}
+.strip-item{display:flex;align-items:center;gap:.6rem;flex-shrink:0;cursor:pointer;transition:opacity .2s}
+.strip-item:hover{opacity:.65}
+.strip-yr{font-family:var(--f-black);font-size:.75rem;letter-spacing:.08em;color:var(--ink)}
+.strip-ch{font-family:var(--f-narrow);font-size:.78rem;font-weight:700;color:var(--ink-mid)}
+.strip-fl{font-size:1.1rem}
+
+/* SECTION COMMON */
+.sec-eye{display:flex;align-items:center;gap:.75rem;font-family:var(--f-narrow);font-size:.68rem;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem}
+.sec-eye::before{content:'';width:26px;height:2px;background:var(--gold)}
+.sec-title{font-family:var(--f-display);font-size:clamp(2.2rem,5vw,4rem);line-height:1;color:var(--ink);margin-bottom:.4rem}
+.sec-sub{font-family:var(--f-serif);font-style:italic;font-size:.92rem;color:var(--ink-soft);margin-bottom:2.5rem}
+
+/* TOURNAMENTS */
+#tournaments{background:var(--paper);padding:clamp(4rem,8vw,7rem) clamp(1.25rem,5vw,5rem)}
+.t-tabs{display:flex;flex-wrap:wrap;border-bottom:2px solid var(--rule);margin-bottom:3rem}
+.t-tab{font-family:var(--f-black);font-size:.8rem;letter-spacing:.1em;padding:.7rem 1.4rem;cursor:pointer;border:none;background:none;color:var(--ink-soft);border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .2s}
+.t-tab:hover{color:var(--ink)}
+.t-tab.active{color:var(--ink);border-bottom-color:var(--gold)}
+.t-panel{display:none}
+.t-panel.active{display:block;animation:panIn .4s var(--ease) both}
+@keyframes panIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.t-grid{display:grid;grid-template-columns:320px 1fr;gap:3rem;align-items:start}
+@media(max-width:900px){.t-grid{grid-template-columns:1fr}}
+
+/* Tournament left card */
+.t-card{background:var(--ink);padding:2.25rem;position:relative;overflow:hidden}
+.t-yr-bg{position:absolute;bottom:-1rem;right:.5rem;font-family:var(--f-display);font-size:7rem;line-height:1;color:rgba(242,237,228,.05);pointer-events:none;font-style:italic}
+.t-ed{font-family:var(--f-narrow);font-size:.62rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:1.25rem}
+.t-cf{font-size:2.8rem;display:block;margin-bottom:.65rem}
+.t-cn{font-family:var(--f-display);font-size:2.2rem;color:var(--paper);line-height:1;margin-bottom:.2rem}
+.t-cs{font-family:var(--f-serif);font-style:italic;font-size:.82rem;color:rgba(242,237,228,.35);margin-bottom:1.75rem}
+.t-final{border-top:1px solid rgba(242,237,228,.08);padding-top:1.1rem;margin-bottom:1.5rem}
+.t-fl{font-family:var(--f-narrow);font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(242,237,228,.28);margin-bottom:.55rem}
+.t-score{display:flex;align-items:center;gap:.85rem}
+.t-st{display:flex;align-items:center;gap:.45rem}
+.t-sf{font-size:1.2rem}
+.t-sa{font-family:var(--f-black);font-size:.85rem;color:rgba(242,237,228,.6);letter-spacing:.06em}
+.t-sn{font-family:var(--f-display);font-size:2.6rem;line-height:1;color:var(--paper)}
+.t-sn.w{color:var(--gold-lt)}
+.t-sn.l{color:rgba(242,237,228,.25)}
+.t-dash{color:rgba(242,237,228,.18);font-size:1.1rem}
+.t-meta{display:flex;flex-direction:column;gap:.38rem}
+.t-mi{display:flex;align-items:center;gap:.55rem;font-family:var(--f-narrow);font-size:.76rem;color:rgba(242,237,228,.38)}
+.t-mi i{color:var(--gold);opacity:.65;width:13px;text-align:center;font-size:.75rem}
+
+/* Right content */
+.t-stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);margin-bottom:2rem}
+@media(max-width:600px){.t-stats-row{grid-template-columns:1fr 1fr}}
+.t-sb{background:var(--paper);padding:1.1rem 1.3rem;transition:background .2s}
+.t-sb:hover{background:var(--parchment)}
+.t-sb-lbl{font-family:var(--f-narrow);font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:.3rem}
+.t-sb-val{font-family:var(--f-black);font-size:1.7rem;color:var(--ink);line-height:1;margin-bottom:.12rem}
+.t-sb-sub{font-family:var(--f-serif);font-style:italic;font-size:.7rem;color:var(--ink-soft)}
+.t-narr{font-family:var(--f-serif);font-size:.93rem;line-height:1.9;color:var(--ink-mid);margin-bottom:2rem;columns:2;column-gap:2rem;column-rule:1px solid var(--rule)}
+@media(max-width:700px){.t-narr{columns:1}}
+.t-narr::first-letter{font-family:var(--f-display);font-size:3.5em;float:left;line-height:.75;margin:.1em .1em 0 0;color:var(--gold)}
+.t-awards{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem;margin-bottom:2rem}
+@media(max-width:600px){.t-awards{grid-template-columns:1fr 1fr}}
+.t-aw{border:1px solid var(--rule);padding:.9rem 1rem;background:var(--paper)}
+.t-aw-ico{font-size:1.2rem;margin-bottom:.4rem}
+.t-aw-lbl{font-family:var(--f-narrow);font-size:.58rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.25rem}
+.t-aw-pl{font-family:var(--f-black);font-size:.85rem;color:var(--ink);line-height:1.2;margin-bottom:.12rem}
+.t-aw-dt{font-family:var(--f-serif);font-style:italic;font-size:.7rem;color:var(--ink-soft)}
+.t-tbl-wrap{overflow-x:auto}
+.t-tbl{width:100%;border-collapse:collapse;font-size:.84rem}
+.t-tbl thead tr{border-bottom:2px solid var(--ink)}
+.t-tbl thead th{font-family:var(--f-narrow);font-weight:700;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);padding:.55rem .7rem;text-align:left;white-space:nowrap}
+.t-tbl tbody tr{border-bottom:1px solid var(--rule);transition:background .15s}
+.t-tbl tbody tr:hover{background:var(--parchment)}
+.t-tbl td{padding:.6rem .7rem;color:var(--ink-mid);white-space:nowrap}
+.t-tbl .rnk{font-family:var(--f-black);color:var(--ink-soft)}
+.t-tbl .rnk.gld{color:var(--gold)}
+.t-tbl .pnm{font-family:var(--f-black);font-size:.84rem;color:var(--ink)}
+.t-tbl .st{font-family:var(--f-narrow);font-weight:700;color:var(--ink)}
+.t-tbl .st.lead{color:var(--red)}
+.tbl-hed-lbl{font-family:var(--f-narrow);font-size:.62rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem;display:flex;align-items:center;gap:.4rem}
+
+/* RECORDS */
+#records{background:var(--parchment);padding:clamp(4rem,8vw,7rem) clamp(1.25rem,5vw,5rem);border-top:3px double rgba(18,16,14,.12);border-bottom:3px double rgba(18,16,14,.12)}
+.rec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1.4rem;margin-top:2.5rem}
+.rec-card{background:var(--paper);border:1px solid rgba(18,16,14,.09);border-top:3px solid var(--gold);padding:1.65rem;transition:box-shadow .25s,transform .25s}
+.rec-card:hover{box-shadow:0 8px 32px rgba(18,16,14,.12);transform:translateY(-3px)}
+.rec-cat{font-family:var(--f-narrow);font-size:.6rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:.45rem;display:flex;align-items:center;gap:.45rem}
+.rec-val{font-family:var(--f-display);font-size:3rem;color:var(--ink);line-height:1;margin-bottom:.25rem}
+.rec-player{font-family:var(--f-black);font-size:.95rem;color:var(--ink);margin-bottom:.18rem}
+.rec-ctx{font-family:var(--f-serif);font-style:italic;font-size:.76rem;color:var(--ink-soft);line-height:1.5}
+
+/* NATIONS */
+#nations{padding:clamp(4rem,8vw,7rem) clamp(1.25rem,5vw,5rem);background:var(--paper)}
+.n-wrap{overflow-x:auto;margin-top:2.5rem}
+.n-tbl{width:100%;border-collapse:collapse}
+.n-tbl thead tr{background:var(--ink)}
+.n-tbl thead th{font-family:var(--f-narrow);font-weight:700;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(242,237,228,.5);padding:.8rem 1.1rem;text-align:left;cursor:pointer;white-space:nowrap;user-select:none;transition:color .2s}
+.n-tbl thead th:hover{color:var(--gold-lt)}
+.n-tbl thead th.sorted{color:var(--gold-lt)}
+.n-tbl tbody tr{border-bottom:1px solid var(--rule);transition:background .15s}
+.n-tbl tbody tr:nth-child(even){background:rgba(242,237,228,.4)}
+.n-tbl tbody tr:hover{background:var(--parchment)}
+.n-tbl td{padding:.85rem 1.1rem;font-size:.86rem;color:var(--ink-mid);white-space:nowrap}
+.n-rnk{font-family:var(--f-black);color:var(--ink-soft)}
+.n-rnk.gold{color:var(--gold)}
+.n-rnk.silver{color:#888}
+.n-rnk.bronze{color:#8B4513}
+.n-nm{display:flex;align-items:center;gap:.7rem;font-family:var(--f-black);font-size:.88rem;color:var(--ink)}
+.t-pills{display:flex;gap:3px;align-items:center}
+.t-pill{display:inline-flex;align-items:center;justify-content:center;background:var(--gold);color:var(--ink);font-family:var(--f-black);font-size:.58rem;width:17px;height:17px;border-radius:2px}
+.n-st{font-family:var(--f-narrow);font-weight:700;color:var(--ink)}
+.n-pct{font-family:var(--f-narrow);font-weight:700;color:var(--red)}
+.pct-wrap{display:flex;align-items:center;gap:.55rem}
+.pct-bar{width:72px;height:3px;background:var(--rule);border-radius:2px;overflow:hidden}
+.pct-fill{height:100%;background:var(--gold);border-radius:2px;transition:width 1s var(--ease)}
+.n-best{font-family:var(--f-serif);font-style:italic;font-size:.8rem;color:var(--ink-soft)}
+
+/* FOOTER */
+footer{background:var(--ink);padding:2.25rem clamp(1.25rem,5vw,5rem);border-top:2px solid var(--gold)}
+.ft-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.5rem}
+.ft-logo{font-family:var(--f-display);font-size:1.5rem;font-style:italic;color:var(--paper)}
+.ft-logo span{color:var(--gold)}
+.ft-copy{font-family:var(--f-narrow);font-size:.7rem;letter-spacing:.04em;color:rgba(242,237,228,.28);margin-top:.2rem}
+.ft-links{display:flex;flex-wrap:wrap;gap:1.25rem}
+.ft-links a{font-family:var(--f-narrow);font-size:.68rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(242,237,228,.38);text-decoration:none;transition:color .2s}
+.ft-links a:hover{color:var(--gold-lt)}
+.ft-soc{display:flex;gap:.45rem}
+.ft-s{width:32px;height:32px;border:1px solid rgba(242,237,228,.1);display:flex;align-items:center;justify-content:center;color:rgba(242,237,228,.32);text-decoration:none;font-size:.82rem;transition:all .2s}
+.ft-s:hover{border-color:var(--gold);color:var(--gold-lt)}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+.reveal.visible{opacity:1;transform:none}
+
+/* RESPONSIVE */
+@media(max-width:768px){.nav-links{display:none}.nav-ed{display:none}.t-awards{grid-template-columns:1fr 1fr}.t-stats-row{grid-template-columns:1fr 1fr}.rec-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.rec-grid{grid-template-columns:1fr}.t-tab{padding:.55rem .8rem;font-size:.72rem}.hero-facts{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#hero" class="nav-logo">
+    <span class="nav-logo-main">WBC</span>
+    <span class="nav-logo-sub">The Complete Archive</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#tournaments">Tournaments</a></li>
+    <li><a href="#records">Records</a></li>
+    <li><a href="#nations">Nations</a></li>
+  </ul>
+  <div class="nav-ed">Est. 2006 · Five Editions</div>
+</nav>
+
+<section id="hero">
+  <div class="hero-tex"></div>
+  <div class="hero-inner">
+    <div class="masthead-rule">
+      <span class="masthead-date">Founded 2006 · Five Editions Completed · Next Edition 2026</span>
+      <span class="masthead-line"></span>
+      <span class="masthead-vol">Vol. I — Historical Edition</span>
+    </div>
+    <div class="hero-kicker">The Definitive Record</div>
+    <h1 class="hero-headline">World<br>Baseball<br><em>Classic</em></h1>
+    <div class="hero-body">
+      <p class="hero-desc">Since <strong>2006</strong>, the World Baseball Classic has brought the finest players on the planet together to represent their nations on the grandest stage in baseball. From Ichiro's inspiration in the inaugural edition to <strong>Shohei Ohtani striking out Mike Trout</strong> to seal Japan's third title in 2023 — this is the complete archive of every champion, every record, and every unforgettable moment.</p>
+      <div class="hero-facts">
+        <div class="fact"><div class="fact-num">5</div><div class="fact-lbl">Editions</div></div>
+        <div class="fact"><div class="fact-num"><span>3×</span></div><div class="fact-lbl">Japan Titles</div></div>
+        <div class="fact"><div class="fact-num">39</div><div class="fact-lbl">Nations Total</div></div>
+        <div class="fact"><div class="fact-num">'06–'23</div><div class="fact-lbl">History</div></div>
+      </div>
+    </div>
+    <a href="#tournaments" class="hero-cta"><i class="fas fa-chevron-down"></i> Browse the Archive</a>
+  </div>
+  <div class="champs-strip">
+    <span class="strip-lbl">Champions</span>
+    <span class="strip-div"></span>
+    <div class="strip-item" onclick="openTab('t2006')"><span class="strip-fl">🇯🇵</span><span class="strip-yr">2006</span><span class="strip-ch">Japan</span></div>
+    <span class="strip-div"></span>
+    <div class="strip-item" onclick="openTab('t2009')"><span class="strip-fl">🇯🇵</span><span class="strip-yr">2009</span><span class="strip-ch">Japan</span></div>
+    <span class="strip-div"></span>
+    <div class="strip-item" onclick="openTab('t2013')"><span class="strip-fl">🇩🇴</span><span class="strip-yr">2013</span><span class="strip-ch">Dominican Republic</span></div>
+    <span class="strip-div"></span>
+    <div class="strip-item" onclick="openTab('t2017')"><span class="strip-fl">🇺🇸</span><span class="strip-yr">2017</span><span class="strip-ch">United States</span></div>
+    <span class="strip-div"></span>
+    <div class="strip-item" onclick="openTab('t2023')"><span class="strip-fl">🇯🇵</span><span class="strip-yr">2023</span><span class="strip-ch">Japan</span></div>
+  </div>
+</section>
+
+<section id="tournaments">
+  <div class="sec-eye">Five Editions</div>
+  <h2 class="sec-title">Tournament by Tournament</h2>
+  <p class="sec-sub">Select an edition to explore results, stats, and stories</p>
+  <div class="t-tabs">
+    <button class="t-tab active" id="tab-t2006" onclick="openTab('t2006')">🇯🇵 2006</button>
+    <button class="t-tab" id="tab-t2009" onclick="openTab('t2009')">🇯🇵 2009</button>
+    <button class="t-tab" id="tab-t2013" onclick="openTab('t2013')">🇩🇴 2013</button>
+    <button class="t-tab" id="tab-t2017" onclick="openTab('t2017')">🇺🇸 2017</button>
+    <button class="t-tab" id="tab-t2023" onclick="openTab('t2023')">🇯🇵 2023</button>
+  </div>
+  <div id="panelsContainer"></div>
+</section>
+
+<section id="records">
+  <div class="sec-eye reveal">All-Time Records</div>
+  <h2 class="sec-title reveal">The Record Books</h2>
+  <p class="sec-sub reveal">Single-tournament and all-time marks across WBC history</p>
+  <div class="rec-grid" id="recordsGrid"></div>
+</section>
+
+<section id="nations">
+  <div class="sec-eye reveal">By Country</div>
+  <h2 class="sec-title reveal">Nations Rankings</h2>
+  <p class="sec-sub reveal">All-time WBC standings — click column headers to sort</p>
+  <div class="n-wrap reveal">
+    <table class="n-tbl" id="nationsTable">
+      <thead><tr>
+        <th onclick="sortN('rank')">#</th>
+        <th onclick="sortN('name')">Nation</th>
+        <th onclick="sortN('titles')">Titles</th>
+        <th onclick="sortN('apps')">App.</th>
+        <th onclick="sortN('w')">W</th>
+        <th onclick="sortN('l')">L</th>
+        <th onclick="sortN('pct')">W%</th>
+        <th onclick="sortN('rf')">R/G</th>
+        <th>Best Finish</th>
+      </tr></thead>
+      <tbody id="nationsBody"></tbody>
+    </table>
+  </div>
+</section>
+
+<footer>
+  <div class="ft-inner">
+    <div>
+      <div class="ft-logo">WBC <span>Archive</span></div>
+      <div class="ft-copy">© 2024 World Baseball Classic Historical Archive · All statistics are historical records</div>
+    </div>
+    <div class="ft-links">
+      <a href="#tournaments">Tournaments</a>
+      <a href="#records">Records</a>
+      <a href="#nations">Nations</a>
+    </div>
+    <div class="ft-soc">
+      <a href="#" class="ft-s"><i class="fab fa-twitter"></i></a>
+      <a href="#" class="ft-s"><i class="fab fa-instagram"></i></a>
+      <a href="#" class="ft-s"><i class="fab fa-youtube"></i></a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const tournaments={
+  t2006:{id:'t2006',year:2006,edition:'1st Edition',champion:'Japan',champFlag:'🇯🇵',champAbbr:'JPN',runnerUp:'Cuba',runnerUpFlag:'🇨🇺',runnerUpAbbr:'CUB',champScore:10,ruScore:6,host:'Japan / USA / Puerto Rico',dates:'March 3–20, 2006',teams:16,games:39,attendance:'745,111',narrative:`The inaugural World Baseball Classic announced itself with a shock — the United States, baseball's birthplace, was eliminated in the second round by Mexico and South Korea. Meanwhile, Japan emerged as the tournament's soul, riding an extraordinary run engineered by manager Sadaharu Oh and inspired by Ichiro Suzuki. Japan navigated a pool play controversy before ultimately triumphing in the championship game over Cuba 10–6 in San Diego. Ichiro delivered the most iconic hit of the tournament — a two-run single against South Korea — and was named the tournament's MVP. The Classic drew 745,111 fans and proved baseball's global appeal beyond any doubt, setting the stage for four more editions of breathtaking international competition.`,stats:[{label:'Total Games',val:'39',sub:'Across all rounds'},{label:'Total Runs',val:'313',sub:'8.0 per game'},{label:'Attendance',val:'745K',sub:'Total fans'}],awards:[{icon:'🏆',label:'MVP',player:'Daisuke Matsuzaka',detail:'JPN · 2-0, 10 K, 1.38 ERA'},{icon:'🥇',label:'Best Hitter',player:'Ichiro Suzuki',detail:'JPN · .364 AVG, 9 H, 5 R'},{icon:'🎯',label:'Best Pitcher',player:'D. Matsuzaka',detail:'JPN · 2-0, 1.38 ERA'},{icon:'⚡',label:'All-Tournament',player:'Nomar Garciaparra',detail:'USA · .500 AVG'},{icon:'🔥',label:'Top Closer',player:'Akinori Otsuka',detail:'JPN · 3 saves'},{icon:'🏟️',label:'Championship Site',player:'San Diego',detail:'PETCO Park Final'}],topHitters:[{rank:1,name:'Ichiro Suzuki',team:'JPN',flag:'🇯🇵',avg:'.364',hr:1,rbi:6,ops:'.990'},{rank:2,name:'Nomar Garciaparra',team:'USA',flag:'🇺🇸',avg:'.500',hr:0,rbi:5,ops:'1.125'},{rank:3,name:'Adrián González',team:'MEX',flag:'🇲🇽',avg:'.316',hr:2,rbi:7,ops:'1.000'},{rank:4,name:'Alex Rodriguez',team:'USA',flag:'🇺🇸',avg:'.321',hr:2,rbi:6,ops:'1.010'},{rank:5,name:'Seiichi Uchikawa',team:'JPN',flag:'🇯🇵',avg:'.348',hr:1,rbi:4,ops:'.950'}]},
+  t2009:{id:'t2009',year:2009,edition:'2nd Edition',champion:'Japan',champFlag:'🇯🇵',champAbbr:'JPN',runnerUp:'South Korea',runnerUpFlag:'🇰🇷',runnerUpAbbr:'KOR',champScore:5,ruScore:3,host:'Japan / USA / Puerto Rico / Mexico',dates:'March 5–23, 2009',teams:16,games:38,attendance:'831,617',narrative:`The 2009 edition produced perhaps the most intense rivalry in WBC history — Japan and South Korea met five times across the tournament, including the final in Los Angeles. Ichiro Suzuki delivered yet again, a go-ahead two-run single in extra innings of the championship game cementing Japan's back-to-back title. The tournament will be remembered for its extraordinary quality of play and international fervor. South Korea's Seung-Yeop Lee battered opponents throughout pool play before Japan ultimately prevailed 5–3 in ten innings at Dodger Stadium. The broadcast reached over one billion viewers worldwide — undeniable proof that baseball had found its World Cup moment.`,stats:[{label:'Total Games',val:'38',sub:'Across all rounds'},{label:'Total Runs',val:'302',sub:'7.9 per game'},{label:'Attendance',val:'831K',sub:'Record at the time'}],awards:[{icon:'🏆',label:'MVP',player:'Ichiro Suzuki',detail:'JPN · .364 AVG, iconic final hit'},{icon:'🥇',label:'Best Hitter',player:'Seung-Yeop Lee',detail:'KOR · .444 AVG, 4 HR, 10 RBI'},{icon:'🎯',label:'Best Pitcher',player:'Daisuke Matsuzaka',detail:'JPN · 3-0, 1.73 ERA'},{icon:'⚡',label:'All-Tournament',player:'Torii Hunter',detail:'USA · Outstanding defense'},{icon:'🔥',label:'Top Closer',player:'Jonathan Broxton',detail:'USA · 2 saves'},{icon:'🏟️',label:'Championship Site',player:'Los Angeles',detail:'Dodger Stadium Final'}],topHitters:[{rank:1,name:'Seung-Yeop Lee',team:'KOR',flag:'🇰🇷',avg:'.444',hr:4,rbi:10,ops:'1.390'},{rank:2,name:'Kevin Youkilis',team:'USA',flag:'🇺🇸',avg:'.391',hr:2,rbi:5,ops:'1.050'},{rank:3,name:'Nelson Cruz',team:'DOM',flag:'🇩🇴',avg:'.370',hr:3,rbi:8,ops:'1.150'},{rank:4,name:'Ichiro Suzuki',team:'JPN',flag:'🇯🇵',avg:'.364',hr:0,rbi:7,ops:'.920'},{rank:5,name:'Yadier Molina',team:'PUR',flag:'🇵🇷',avg:'.333',hr:1,rbi:6,ops:'.960'}]},
+  t2013:{id:'t2013',year:2013,edition:'3rd Edition',champion:'Dominican Republic',champFlag:'🇩🇴',champAbbr:'DOM',runnerUp:'Puerto Rico',runnerUpFlag:'🇵🇷',runnerUpAbbr:'PUR',champScore:3,ruScore:0,host:'Japan / USA / Puerto Rico / Taiwan',dates:'March 2–19, 2013',teams:16,games:37,attendance:'902,364',narrative:`The Dominican Republic's 2013 campaign stands as the greatest single-tournament performance in WBC history. Featuring arguably the deepest roster ever assembled — Robinson Canó, Nelson Cruz, José Bautista, Edwin Encarnación, and Hanley Ramirez — the Dominicans went 8-0, becoming the first and only undefeated champion. Their 3-0 final against Puerto Rico at AT&T Park in San Francisco was a flawless culmination. Fernando Rodney's iconic bow-and-arrow celebration after the final out became one of sport's most recognizable images. Robinson Canó was named MVP after batting .469 with four home runs and thirteen RBI — a statistical performance that may never be matched in WBC history.`,stats:[{label:'Total Games',val:'37',sub:'Across all rounds'},{label:'DOM Record',val:'8–0',sub:'Only unbeaten champion ever'},{label:'Attendance',val:'902K',sub:'New record at time'}],awards:[{icon:'🏆',label:'MVP',player:'Robinson Canó',detail:'DOM · .469 AVG, 4 HR, 13 RBI'},{icon:'🥇',label:'Best Hitter',player:'Robinson Canó',detail:'DOM · Most dominant WBC offensive run'},{icon:'🎯',label:'Best Pitcher',player:'Samuel Deduno',detail:'DOM · 2-0, 1.29 ERA'},{icon:'⚡',label:'All-Tournament',player:'Yadier Molina',detail:'PUR · .414 AVG, great leadership'},{icon:'🔥',label:'Iconic Moment',player:'Fernando Rodney',detail:'DOM · Bow-and-arrow celebration'},{icon:'🏟️',label:'Championship Site',player:'San Francisco',detail:'AT&T Park Final'}],topHitters:[{rank:1,name:'Robinson Canó',team:'DOM',flag:'🇩🇴',avg:'.469',hr:4,rbi:13,ops:'1.530'},{rank:2,name:'Yadier Molina',team:'PUR',flag:'🇵🇷',avg:'.414',hr:1,rbi:6,ops:'1.080'},{rank:3,name:'José Bautista',team:'DOM',flag:'🇩🇴',avg:'.364',hr:2,rbi:9,ops:'1.200'},{rank:4,name:'Edwin Encarnación',team:'DOM',flag:'🇩🇴',avg:'.333',hr:3,rbi:8,ops:'1.140'},{rank:5,name:'Carlos Correa',team:'PUR',flag:'🇵🇷',avg:'.350',hr:0,rbi:4,ops:'.900'}]},
+  t2017:{id:'t2017',year:2017,edition:'4th Edition',champion:'United States',champFlag:'🇺🇸',champAbbr:'USA',runnerUp:'Puerto Rico',runnerUpFlag:'🇵🇷',runnerUpAbbr:'PUR',champScore:8,ruScore:0,host:'USA / Japan / Mexico / South Korea',dates:'March 6–22, 2017',teams:16,games:37,attendance:'991,572',narrative:`For a nation that invented the sport, the United States waited eleven years to claim its first WBC title. Team USA dismantled Puerto Rico 8-0 in the final at Dodger Stadium, with Marcus Stroman pitching the game of his life. The tournament saw dramatic moments throughout: Japan edged out Netherlands in a tense quarterfinal, Puerto Rico rallied past Dominican Republic in a Caribbean classic, and the Netherlands nearly pulled off one of the great upsets. Marcus Stroman won MVP honors after going 3-0 with a 1.67 ERA and completing a shutout in the final, while Ian Kinsler provided the veteran leadership that had eluded previous American squads in prior editions.`,stats:[{label:'Total Games',val:'37',sub:'Across all rounds'},{label:'Final Margin',val:'8–0',sub:'USA dominant win'},{label:'Attendance',val:'991K',sub:'Near one million'}],awards:[{icon:'🏆',label:'MVP',player:'Marcus Stroman',detail:'USA · 3-0, 1.67 ERA, CG shutout final'},{icon:'🥇',label:'Best Hitter',player:'Christian Yelich',detail:'USA · .350 AVG in key rounds'},{icon:'🎯',label:'Best Pitcher',player:'Marcus Stroman',detail:'USA · 3-0, complete game final'},{icon:'⚡',label:'All-Tournament',player:'Yadier Molina',detail:'PUR · Third straight all-tournament'},{icon:'🔥',label:'Clutch Moment',player:'Adam Jones',detail:'USA · Grand slam vs Dominican Republic'},{icon:'🏟️',label:'Championship Site',player:'Los Angeles',detail:'Dodger Stadium Final'}],topHitters:[{rank:1,name:'Carlos Correa',team:'PUR',flag:'🇵🇷',avg:'.368',hr:3,rbi:9,ops:'1.190'},{rank:2,name:'Nolan Arenado',team:'USA',flag:'🇺🇸',avg:'.318',hr:2,rbi:8,ops:'1.020'},{rank:3,name:'Christian Yelich',team:'USA',flag:'🇺🇸',avg:'.350',hr:1,rbi:5,ops:'.970'},{rank:4,name:'Ian Kinsler',team:'USA',flag:'🇺🇸',avg:'.292',hr:2,rbi:7,ops:'.900'},{rank:5,name:'Yadier Molina',team:'PUR',flag:'🇵🇷',avg:'.304',hr:1,rbi:5,ops:'.860'}]},
+  t2023:{id:'t2023',year:2023,edition:'5th Edition',champion:'Japan',champFlag:'🇯🇵',champAbbr:'JPN',runnerUp:'United States',runnerUpFlag:'🇺🇸',runnerUpAbbr:'USA',champScore:3,ruScore:2,host:'Japan / USA / Taiwan / Mexico',dates:'March 8–21, 2023',teams:20,games:45,attendance:'1,052,018',narrative:`The 2023 World Baseball Classic will be remembered as the tournament that finally matched its own legend. Shohei Ohtani led Japan on an undefeated run that concluded with one of sport's most theatrical moments: Ohtani striking out his Los Angeles Angels teammate Mike Trout on a sweeper to end the championship game 3-2 at LoanDepot Park. The tournament expanded to 20 nations for the first time, drew over one million fans, and produced extraordinary depth: Italy advanced further than any European nation ever had, and Ohtani batted .435 with 1 HR and 8 RBI while also dominating on the mound. The world had never seen anything quite like it, and it set an extraordinarily high bar for the 2026 edition.`,stats:[{label:'Total Games',val:'45',sub:'Largest tournament ever'},{label:'Nations',val:'20',sub:'Record expansion'},{label:'Attendance',val:'1.05M',sub:'All-time record'}],awards:[{icon:'🏆',label:'MVP',player:'Shohei Ohtani',detail:'JPN · .435 AVG, 1 HR, 8 RBI, 1.86 ERA'},{icon:'🥇',label:'Best Hitter',player:'Trea Turner',detail:'USA · .400 AVG, 4 HR, 10 RBI'},{icon:'🎯',label:'Best Pitcher',player:'Shohei Ohtani',detail:'JPN · 2-0, 1.86 ERA, 11 K'},{icon:'⚡',label:'Defining Moment',player:'Ohtani vs Trout',detail:'Final pitch — Championship struck out'},{icon:'🔥',label:'Surprise Story',player:'Italy',detail:'Best ever European finish — QF'},{icon:'🏟️',label:'Championship Site',player:'Miami',detail:'LoanDepot Park Final'}],topHitters:[{rank:1,name:'Shohei Ohtani',team:'JPN',flag:'🇯🇵',avg:'.435',hr:1,rbi:8,ops:'1.182'},{rank:2,name:'Trea Turner',team:'USA',flag:'🇺🇸',avg:'.400',hr:4,rbi:10,ops:'1.340'},{rank:3,name:'Randy Arozarena',team:'MEX',flag:'🇲🇽',avg:'.360',hr:2,rbi:8,ops:'1.090'},{rank:4,name:'Munetaka Murakami',team:'JPN',flag:'🇯🇵',avg:'.333',hr:3,rbi:9,ops:'1.060'},{rank:5,name:"Ke'Bryan Hayes",team:'USA',flag:'🇺🇸',avg:'.318',hr:1,rbi:5,ops:'.940'}]}
+};
+
+const records=[
+  {cat:'Single Tournament AVG',icon:'fas fa-baseball-bat-ball',val:'.469',player:'Robinson Canó',flag:'🇩🇴',ctx:'2013 · Most dominant WBC offensive performance — 4 HR, 13 RBI in a single tournament'},
+  {cat:'Single Tournament RBI',icon:'fas fa-bolt',val:'13',player:'Robinson Canó',flag:'🇩🇴',ctx:'2013 · Dominican Republic\'s undefeated run through the bracket'},
+  {cat:'Most Tournament Titles',icon:'fas fa-trophy',val:'3×',player:'Japan',flag:'🇯🇵',ctx:'2006, 2009, 2023 · The most decorated nation in WBC history'},
+  {cat:'Best Single-Tournament ERA',icon:'fas fa-wind',val:'1.29',player:'Samuel Deduno',flag:'🇩🇴',ctx:'2013 · Min. 15 IP · Dominant across Dominican Republic\'s unbeaten run'},
+  {cat:'Consecutive Wins',icon:'fas fa-chart-line',val:'8–0',player:'Dominican Republic',flag:'🇩🇴',ctx:'2013 · The only undefeated champion in WBC history'},
+  {cat:'Total Attendance Record',icon:'fas fa-users',val:'1.05M',player:'2023 Edition',flag:'🇺🇸',ctx:'First tournament to exceed one million fans — 20 nations, Miami final'},
+  {cat:'Most Games as MVP',icon:'fas fa-star',val:'2×',player:'Ichiro Suzuki',flag:'🇯🇵',ctx:'2006, 2009 · Back-to-back MVP, two consecutive championships with Japan'},
+  {cat:'Best Single Tournament OPS',icon:'fas fa-fire',val:'1.530',player:'Robinson Canó',flag:'🇩🇴',ctx:'2013 · Min. 15 PA · Possibly the greatest offensive tournament ever played'},
+];
+
+const nations=[
+  {rank:1,name:'Japan',flag:'🇯🇵',titles:3,apps:5,w:26,l:10,pct:72.2,rf:5.9,best:'Champions ×3'},
+  {rank:2,name:'Dominican Republic',flag:'🇩🇴',titles:1,apps:5,w:21,l:12,pct:63.6,rf:6.1,best:'Champions ×1'},
+  {rank:3,name:'United States',flag:'🇺🇸',titles:1,apps:5,w:20,l:13,pct:60.6,rf:5.4,best:'Champions ×1'},
+  {rank:4,name:'Puerto Rico',flag:'🇵🇷',titles:0,apps:5,w:19,l:13,pct:59.4,rf:5.7,best:'Runner-up ×2'},
+  {rank:5,name:'South Korea',flag:'🇰🇷',titles:0,apps:5,w:18,l:14,pct:56.3,rf:5.0,best:'Runner-up ×1'},
+  {rank:6,name:'Cuba',flag:'🇨🇺',titles:0,apps:5,w:17,l:15,pct:53.1,rf:5.2,best:'Runner-up ×1'},
+  {rank:7,name:'Venezuela',flag:'🇻🇪',titles:0,apps:5,w:14,l:15,pct:48.3,rf:4.8,best:'Semifinals'},
+  {rank:8,name:'Mexico',flag:'🇲🇽',titles:0,apps:5,w:13,l:16,pct:44.8,rf:4.4,best:'Quarterfinals'},
+  {rank:9,name:'Netherlands',flag:'🇳🇱',titles:0,apps:5,w:11,l:16,pct:40.7,rf:4.1,best:'Semifinals'},
+  {rank:10,name:'Italy',flag:'🇮🇹',titles:0,apps:4,w:10,l:13,pct:43.5,rf:4.6,best:'Quarterfinals'},
+  {rank:11,name:'Canada',flag:'🇨🇦',titles:0,apps:5,w:8,l:16,pct:33.3,rf:3.7,best:'2nd Round'},
+  {rank:12,name:'Australia',flag:'🇦🇺',titles:0,apps:5,w:6,l:18,pct:25.0,rf:3.2,best:'2nd Round'},
+];
+
+let nSort={col:'rank',dir:1};
+
+function renderPanels(){
+  document.getElementById('panelsContainer').innerHTML=Object.values(tournaments).map(t=>`
+    <div class="t-panel ${t.id==='t2006'?'active':''}" id="panel-${t.id}">
+      <div class="t-grid">
+        <div class="t-card">
+          <div class="t-ed">${t.edition} · ${t.year}</div>
+          <span class="t-cf">${t.champFlag}</span>
+          <div class="t-cn">${t.champion}</div>
+          <div class="t-cs">World Champions</div>
+          <div class="t-final">
+            <div class="t-fl">Championship Final</div>
+            <div class="t-score">
+              <div class="t-st"><span class="t-sf">${t.champFlag}</span><span class="t-sa">${t.champAbbr}</span></div>
+              <span class="t-sn w">${t.champScore}</span>
+              <span class="t-dash">—</span>
+              <span class="t-sn l">${t.ruScore}</span>
+              <div class="t-st"><span class="t-sa">${t.runnerUpAbbr}</span><span class="t-sf">${t.runnerUpFlag}</span></div>
+            </div>
+          </div>
+          <div class="t-meta">
+            <div class="t-mi"><i class="fas fa-calendar"></i>${t.dates}</div>
+            <div class="t-mi"><i class="fas fa-location-dot"></i>${t.host}</div>
+            <div class="t-mi"><i class="fas fa-flag"></i>${t.teams} nations competing</div>
+            <div class="t-mi"><i class="fas fa-users"></i>${t.attendance} attendance</div>
+          </div>
+          <div class="t-yr-bg">${t.year}</div>
+        </div>
+        <div>
+          <div class="t-stats-row">${t.stats.map(s=>`<div class="t-sb"><div class="t-sb-lbl">${s.label}</div><div class="t-sb-val">${s.val}</div><div class="t-sb-sub">${s.sub}</div></div>`).join('')}</div>
+          <p class="t-narr">${t.narrative}</p>
+          <div class="t-awards">${t.awards.map(a=>`<div class="t-aw"><div class="t-aw-ico">${a.icon}</div><div class="t-aw-lbl">${a.label}</div><div class="t-aw-pl">${a.player}</div><div class="t-aw-dt">${a.detail}</div></div>`).join('')}</div>
+          <div class="tbl-hed-lbl"><i class="fas fa-table"></i> Top Hitters · ${t.year}</div>
+          <div class="t-tbl-wrap"><table class="t-tbl"><thead><tr><th>#</th><th>Player</th><th>Team</th><th>AVG</th><th>HR</th><th>RBI</th><th>OPS</th></tr></thead><tbody>${t.topHitters.map(p=>`<tr><td class="rnk ${p.rank===1?'gld':''}">${p.rank}</td><td class="pnm">${p.name}</td><td>${p.flag} ${p.team}</td><td class="st ${p.rank===1?'lead':''}">${p.avg}</td><td class="st">${p.hr}</td><td class="st">${p.rbi}</td><td class="st">${p.ops}</td></tr>`).join('')}</tbody></table></div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openTab(id){
+  document.querySelectorAll('.t-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.t-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  document.getElementById('panel-'+id).classList.add('active');
+  document.getElementById('tournaments').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function renderRecords(){
+  document.getElementById('recordsGrid').innerHTML=records.map(r=>`
+    <div class="rec-card reveal">
+      <div class="rec-cat"><i class="${r.icon}"></i>${r.cat}</div>
+      <div class="rec-val">${r.val}</div>
+      <div class="rec-player">${r.flag} ${r.player}</div>
+      <div class="rec-ctx">${r.ctx}</div>
+    </div>
+  `).join('');
+}
+
+function renderNations(){
+  const sorted=[...nations].sort((a,b)=>{
+    let va=a[nSort.col],vb=b[nSort.col];
+    return(typeof va==='string'?va.localeCompare(vb):va-vb)*nSort.dir;
+  });
+  document.getElementById('nationsBody').innerHTML=sorted.map((n,i)=>`
+    <tr>
+      <td class="n-rnk ${i===0?'gold':i===1?'silver':i===2?'bronze':''}">${i+1}</td>
+      <td><div class="n-nm">${n.flag} ${n.name}</div></td>
+      <td><div class="t-pills">${n.titles>0?Array.from({length:n.titles},()=>'<span class="t-pill">★</span>').join(''):'<span style="color:var(--ink-soft);font-size:.78rem">—</span>'}</div></td>
+      <td class="n-st">${n.apps}</td>
+      <td class="n-st">${n.w}</td>
+      <td class="n-st">${n.l}</td>
+      <td><div class="pct-wrap"><span class="n-pct">${n.pct.toFixed(1)}%</span><div class="pct-bar"><div class="pct-fill" style="width:${Math.round(n.pct)}%"></div></div></div></td>
+      <td class="n-st">${n.rf}</td>
+      <td class="n-best">${n.best}</td>
+    </tr>
+  `).join('');
+}
+
+function sortN(col){
+  if(nSort.col===col)nSort.dir*=-1;
+  else{nSort.col=col;nSort.dir=1}
+  renderNations();
+  document.querySelectorAll('.n-tbl thead th').forEach(th=>th.classList.remove('sorted'));
+  const cols=['rank','name','titles','apps','w','l','pct','rf','best'];
+  const i=cols.indexOf(col);
+  if(i>=0)document.querySelectorAll('.n-tbl thead th')[i]?.classList.add('sorted');
+}
+
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}});
+},{threshold:.07});
+
+document.addEventListener('DOMContentLoaded',()=>{
+  renderPanels();
+  renderRecords();
+  renderNations();
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+});
+</script>
+</body>
+</html>
