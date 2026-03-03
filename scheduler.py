@@ -1,20 +1,18 @@
 #!/usr/bin/env python3
 """
-Generate an ICS calendar file for the 2023 World Baseball Classic schedule.
+Generate an ICS calendar file for the 2026 World Baseball Classic schedule.
 All times are based on US Eastern Time broadcast schedules and converted to UTC.
 """
 
 import datetime
-import sys
 
-# Try to use zoneinfo (Python 3.9+), fallback to pytz
 try:
     from zoneinfo import ZoneInfo
 except ImportError:
-    from pytz import timezone as ZoneInfo  # requires `pip install pytz`
+    from pytz import timezone as ZoneInfo
 
 # ------------------------------------------------------------
-# Game data: each entry is (date_str, time_str, pool, team1, team2, broadcaster)
+# Game data: (date_str, time_str, pool, team1, team2, broadcaster)
 # ------------------------------------------------------------
 GAMES = [
     # Pool B
@@ -83,10 +81,10 @@ def parse_datetime_ny(date_str, time_str, year=2026):
     month = month_map[month_abbr]
     time_obj = datetime.datetime.strptime(time_str, "%I:%M %p").time()
     naive = datetime.datetime(year, month, int(day), time_obj.hour, time_obj.minute)
-    # Assume all times are US Eastern Time (broadcast schedule)
     return naive.replace(tzinfo=ZoneInfo("America/New_York"))
 
 def escape_ics_text(text):
+    """Escape text for ICS: backslash, comma, semicolon, and newline."""
     return text.replace('\\', '\\\\').replace(',', '\\,').replace(';', '\\;').replace('\n', '\\n')
 
 def generate_ics(games, filename="wbc2026_schedule.ics"):
@@ -96,13 +94,13 @@ def generate_ics(games, filename="wbc2026_schedule.ics"):
     lines.append("PRODID:-//WBC Schedule Generator//EN")
     lines.append("CALSCALE:GREGORIAN")
     lines.append("METHOD:PUBLISH")
+    lines.append("X-WR-CALNAME:World Baseball Classic 2026")
 
     for game in games:
         date_str, time_str, pool, team1, team2, broadcaster = game
         start_ny = parse_datetime_ny(date_str, time_str)
-        end_ny = start_ny + datetime.timedelta(hours=3)  # assume 3-hour game
+        end_ny = start_ny + datetime.timedelta(hours=3)
 
-        # Convert to UTC for the ICS (using 'Z' suffix)
         start_utc = start_ny.astimezone(datetime.timezone.utc)
         end_utc = end_ny.astimezone(datetime.timezone.utc)
 
@@ -112,10 +110,15 @@ def generate_ics(games, filename="wbc2026_schedule.ics"):
 
         summary = f"{team1} vs {team2} (Pool {pool})"
         location = POOL_LOCATIONS.get(pool, "")
-        description = f"Broadcast: {broadcaster}\\nPool: {pool}\\nLocation: {location}"
+        # Use actual newline characters; escape_ics_text will turn them into \n
+        description = f"Broadcast: {broadcaster}\nPool: {pool}\nLocation: {location}"
+
+        # UID without spaces
+        uid_base = f"{start_utc.strftime('%Y%m%dT%H%M%S')}-{team1}-{team2}@wbc2026"
+        uid = uid_base.replace(' ', '_')
 
         lines.append("BEGIN:VEVENT")
-        lines.append(f"UID:{start_utc.strftime('%Y%m%dT%H%M%S')}-{team1}-{team2}@wbc2026")
+        lines.append(f"UID:{uid}")
         lines.append(f"DTSTAMP:{datetime.datetime.now(datetime.timezone.utc).strftime(dt_format)}")
         lines.append(f"DTSTART:{dtstart}")
         lines.append(f"DTEND:{dtend}")
@@ -126,8 +129,13 @@ def generate_ics(games, filename="wbc2026_schedule.ics"):
         lines.append("END:VEVENT")
 
     lines.append("END:VCALENDAR")
-    with open(filename, "w", encoding="utf-8") as f:
-        f.write("\r\n".join(lines))
+
+    # Join with CRLF and write without newline translation
+    ics_content = "\r\n".join(lines)
+
+    with open(filename, "w", encoding="utf-8", newline='') as f:
+        f.write(ics_content)
+
     print(f"✅ ICS file written to {filename}")
 
 if __name__ == "__main__":
